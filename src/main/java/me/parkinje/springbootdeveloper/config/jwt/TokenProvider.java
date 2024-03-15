@@ -31,7 +31,7 @@ public class TokenProvider {
         Date now = new Date();
 
         return Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 type:JWT
+                .setHeaderParam(Header.TYPE,Header.JWT_TYPE) // 헤더 type:JWT
                 // 내용 iss : ajufresh@gmail.com (propertise 파일에서 설정한 값 )
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)           // 내용 iat : 현재 시간
@@ -39,7 +39,7 @@ public class TokenProvider {
                 .setSubject(user.getEmail())  // 내용 sub : 유저의 이메일
                 .claim("id", user.getId()) // 클레임 id : 유저 ID
                 // 서명 : 비밀값과 함께 해시값을 HS256 방식으로 암호화
-                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
+                .signWith(SignatureAlgorithm.HS256,jwtProperties.getSecretKey())
                 .compact();
     }
 

@@ -3,10 +3,12 @@ package me.parkinje.springbootdeveloper.controller.config.jwt;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.Builder;
 import lombok.Getter;
 import me.parkinje.springbootdeveloper.config.jwt.JwtProperties;
 
+import java.security.Key;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.Date;
@@ -37,7 +39,6 @@ public class JwtFactory {
 
     // jjwt 라이브러리를 사용해 JWT 토큰 생성
     public String createToken(JwtProperties jwtProperties){
-
         return Jwts.builder()
                 .setSubject(subject)
                 .setHeaderParam(Header.TYPE,Header.JWT_TYPE)
