@@ -58,7 +58,7 @@ public class TokenProviderTest {
 
         //given
         String token = JwtFactory.builder()
-                .expiration(new Date(new Date().getTime() - Duration.of(7).toMillis()))
+                .expiration(new Date(new Date().getTime() - Duration.ofDays(7).toMillis()))
                 .build()
                 .createToken(jwtProperties);
 
