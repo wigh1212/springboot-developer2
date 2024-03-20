@@ -1,5 +1,5 @@
 package me.parkinje.springbootdeveloper.config;
-
+/*
 import lombok.RequiredArgsConstructor;
 import me.parkinje.springbootdeveloper.service.UserDetailService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -68,3 +68,4 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
+*/

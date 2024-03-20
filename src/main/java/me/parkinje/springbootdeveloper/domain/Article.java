@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -34,10 +36,20 @@ public class Article {
     private LocalDateTime updatedAt;
 
 
+    @Column(name = "author",nullable = false)
+    private String author;
+
+
+//    @OneToMany
+//    @JoinColumn
+//    private List<Reply> stations = new ArrayList<>();
+
+
     @Builder
-    public Article(String title,String content){
+    public Article(String author,String title,String content){
         this.title=title;
         this.content=content;
+        this.author=author;
     }
 
     public void update(String title,String content){
