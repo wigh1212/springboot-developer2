@@ -42,4 +42,4 @@ bin/
 .DS_Store
 
 ## 제외 파일
-application.yml
+/src/main/resources/application.yml
