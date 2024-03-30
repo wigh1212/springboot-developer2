@@ -23,7 +23,7 @@ public class BlogApiController {
     @PostMapping("/api/articles")
     //@RequestBody 로 요청 본문 값 매핑
     public ResponseEntity<Article> addArticle(@RequestBody AddArticleRequest request, Principal principal){
-
+        System.out.println("오나??");
         Article savedArticle=blogService.save(request,principal.getName());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedArticle);

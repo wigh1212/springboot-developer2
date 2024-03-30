@@ -54,6 +54,8 @@ public class WebOAuthSecurityConfig {
                 .requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll();
 
+
+        System.out.println("접근안함? ");
         http.oauth2Login()
                 .loginPage("/login")
                 .authorizationEndpoint()

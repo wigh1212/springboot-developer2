@@ -39,7 +39,7 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
                         .email(email)
                         .nickname(name)
                         .build());
-
+        System.out.println("접근 확인 1111");
         return userRepository.save(user);
 
     }
