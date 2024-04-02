@@ -2,6 +2,7 @@ package me.parkinje.springbootdeveloper.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -26,6 +27,9 @@ public class Article {
     @Column(name="content" , nullable = false)
     private String content;
 
+    @JsonIgnore
+    @OneToMany (mappedBy = "article")
+    private List<Reply> replyList = new ArrayList<>();
 
     @CreatedDate
     @Column(name="created_at")
@@ -39,23 +43,21 @@ public class Article {
     @Column(name = "author",nullable = false)
     private String author;
 
-
-//    @OneToMany
-//    @JoinColumn
-//    private List<Reply> stations = new ArrayList<>();
-
-
     @Builder
-    public Article(String author,String title,String content){
+    public Article(String author,String title,String content,List<Reply> replyList){
         this.title=title;
         this.content=content;
         this.author=author;
+        this.replyList=replyList;
     }
 
     public void update(String title,String content){
         this.title=title;
         this.content=content;
+    }
 
+    public void replyUpdate(List<Reply> replyList){
+        this.replyList=replyList;
     }
 
 }

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.parkinje.springbootdeveloper.dto.AddUserRequest;
 import me.parkinje.springbootdeveloper.service.UserService;
+import me.parkinje.springbootdeveloper.util.CookieUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;

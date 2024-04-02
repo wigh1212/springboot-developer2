@@ -13,7 +13,7 @@ if(deleteButton){
             location.replace("/articles");
         }
 
-        httpRequest("DELETE","/api/articles"+id, null, success , fail);
+        httpRequest("DELETE","/api/articles/"+id, null, success , fail);
     });
 }
 
@@ -62,6 +62,33 @@ if(createButton){
         httpRequest("POST","/api/articles",body,success,fail);
     });
 }
+
+
+
+const replyButton = document.getElementById("reply_btn");
+
+if(replyButton){
+    replyButton.addEventListener("click", (event) => {
+        var id=document.getElementById("article-id").value;
+        console.log("id 는?? "+id);
+        console.log("reply "+document.getElementById("reply").value);
+        body= JSON.stringify({
+            //id: document.getElementById("article-id").value,
+            reply: document.getElementById("reply").value,
+        }) ;
+        function success(){
+            alert("등록 완료되었습니다.");
+            location.replace("/articles/"+id);
+        }
+        function fail() {
+            alert("등록 실패했습니다.");
+            location.replace("/articles/"+id);
+        }
+
+        httpRequest("POST","/api/reply/"+id,body,success,fail);
+    });
+}
+
 // 쿠키를 가져오는 함수
 function getCookie(key){
     var result=null;
@@ -88,8 +115,9 @@ function httpRequest(method,url,body,success,fail){
         method: method,
         headers: {
             //로컬 스토리지에서 액세스 토큰 값을 가져와 헤더에 추가
-            Authorization: "Bearer " + localStorage.getItem("access_token"),
-            "Content-Type" : "application/json",
+            Authorization : localStorage.getItem("access_token"),
+            'Content-Type' : "application/json",
+            'Accept-Encoding' : "identity",
         },
         body: body,
     }).then((response) => {

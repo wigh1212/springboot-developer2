@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -16,19 +17,19 @@ import java.time.LocalDateTime;
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="replyid" , updatable = false)
-    private Long replyid;
-
     @Column(name="id" , nullable = false)
     private Long id;
 
+    @Column(name = "username")
+    private String userName;
 
     @Column(name="reply" , nullable = true)
     private String reply;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "id")
-//    private Article article;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
+    private Article article;
 
     @CreatedDate
     @Column(name="created_at")
@@ -40,9 +41,11 @@ public class Reply {
 
 
     @Builder
-    public Reply(String reply,Long id) {
+    public Reply(String reply,Long id,String userName,Article article) {
         this.reply = reply;
         this.id = id;
+        this.userName=userName;
+        this.article=article;
     }
 
 }

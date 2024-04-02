@@ -43,19 +43,20 @@ public class WebOAuthSecurityConfig {
                 .httpBasic().disable()
                 .formLogin().disable()
                 .logout().disable();
-
         // 헤더를 확인할 커스텀 필터 추가
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+
         // 토큰 재발급 URL은 인증 없이 접근 가능하도록 설정. 나머지 API URL은 인증 필요
         http.authorizeRequests()
-                .requestMatchers("/api/token").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/**","/api/reply/**","/img/**").permitAll()
+                //.requestMatchers("/api/token").permitAll()
+                //.requestMatchers("/api/**").authenticated()
                 .anyRequest().permitAll();
 
-
         System.out.println("접근안함? ");
+
         http.oauth2Login()
                 .loginPage("/login")
                 .authorizationEndpoint()
@@ -73,7 +74,7 @@ public class WebOAuthSecurityConfig {
         http.exceptionHandling()
                 .defaultAuthenticationEntryPointFor(new
                         HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                        new AntPathRequestMatcher("/api/**"));
+                        new AntPathRequestMatcher("/api/**","/api/reply/**"));
 
         return http.build();
 

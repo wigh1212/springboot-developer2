@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -26,14 +27,22 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
             ) throws ServletException, IOException {
 
+
+        Enumeration params = request.getHeaderNames();
+        while(params.hasMoreElements()) {
+            String name = (String) params.nextElement();
+            System.out.print(name + " : " + request.getHeader(name) + "     ");
+        }
+
         // 요청 헤더의 Authorization 키의 값 조회
         String authorizationHeader=request.getHeader(HEADER_AUTHORIZATION);
-
+        System.out.println("헤더 유효? "+authorizationHeader);
         // 가져온 값에서 접두사 제거
         String token=getAccessToken(authorizationHeader);
-
+        System.out.println("토큰 유효? "+token);
         //가져온 토큰이 유효한지 확인하고, 유효한 때는 인증 정보 설정
         if(tokenProvider.validToken(token)){
+            System.out.println("유효 하다 ! ");
             Authentication authentication=tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
