@@ -5,6 +5,8 @@ import me.parkinje.springbootdeveloper.domain.Article;
 import me.parkinje.springbootdeveloper.dto.ArticleListViewResponse;
 import me.parkinje.springbootdeveloper.dto.ArticleViewResponse;
 import me.parkinje.springbootdeveloper.service.BlogService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +23,13 @@ public class BlogViewController {
     private final BlogService blogService;
 
     @GetMapping("/articles")
-    public String getArticles(Model model){
+    public String getArticles(Model model, @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "10") int size){
 
-        List<ArticleListViewResponse> articles= blogService.findAll().stream()
-                .map(ArticleListViewResponse::new)
-                .toList();
+        Page<ArticleListViewResponse> articles= blogService.findAll(page,size);
 
         model.addAttribute("articles",articles);
+
         return "articleList";
     }
 

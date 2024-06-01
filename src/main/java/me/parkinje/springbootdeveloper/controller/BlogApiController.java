@@ -3,9 +3,11 @@ package me.parkinje.springbootdeveloper.controller;
 import lombok.RequiredArgsConstructor;
 import me.parkinje.springbootdeveloper.domain.Article;
 import me.parkinje.springbootdeveloper.dto.AddArticleRequest;
+import me.parkinje.springbootdeveloper.dto.ArticleListViewResponse;
 import me.parkinje.springbootdeveloper.dto.ArticleResponse;
 import me.parkinje.springbootdeveloper.dto.UpdateArticleRequest;
 import me.parkinje.springbootdeveloper.service.BlogService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +32,9 @@ public class BlogApiController {
     }
 
     @GetMapping("/api/articles")
-    public ResponseEntity<List<ArticleResponse>> findAllArticle(){
-
-        List<ArticleResponse> articles = blogService.findAll()
-                .stream()
-                .map(ArticleResponse::new)
-                .toList();
+    public ResponseEntity<Page<ArticleResponse>> findAllArticle(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "10") int size){
+        Page<ArticleResponse> articles= blogService.apiFindAll(page,size);
 
         return ResponseEntity.ok().body(articles);
     }

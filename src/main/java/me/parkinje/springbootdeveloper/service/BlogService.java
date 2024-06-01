@@ -5,9 +5,14 @@ import lombok.RequiredArgsConstructor;
 import me.parkinje.springbootdeveloper.domain.Article;
 import me.parkinje.springbootdeveloper.domain.Reply;
 import me.parkinje.springbootdeveloper.dto.AddArticleRequest;
+import me.parkinje.springbootdeveloper.dto.ArticleListViewResponse;
+import me.parkinje.springbootdeveloper.dto.ArticleResponse;
 import me.parkinje.springbootdeveloper.dto.UpdateArticleRequest;
 import me.parkinje.springbootdeveloper.repository.BlogReplyRepository;
 import me.parkinje.springbootdeveloper.repository.BlogRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +43,17 @@ public class BlogService {
         return blogRepository.save(article);
 
     }
-    public List<Article> findAll(){
-        return blogRepository.findAll();
+    public Page<ArticleResponse> apiFindAll(int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+
+        return (Page<ArticleResponse>) blogRepository.findAll(pageable)
+                .map(ArticleResponse::new);
+    }
+
+    public Page<ArticleListViewResponse> findAll(int page,int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return (Page<ArticleListViewResponse>) blogRepository.findAll(pageable)
+                .map(ArticleListViewResponse::new);
     }
 
     public Article findById(long id){

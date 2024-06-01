@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>File Management</title>
+  <style>
+    table {
+        border-collapse: separate;
+        border-spacing: 1px;
+        text-align: left;
+        line-height: 1.5;
+        border-top: 1px solid #ccc;
+        margin: 20px 10px;
+    }
+    table th {
+        width: 150px;
+        padding: 10px;
+        font-weight: bold;
+        vertical-align: top;
+        border-bottom: 1px solid #ccc;
+        background: #efefef;
+    }
+    table td {
+        width: 350px;
+        padding: 10px;
+        vertical-align: top;
+        border-bottom: 1px solid #ccc;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<form id="uploadForm" action="/files/upload" method="post" enctype="multipart/form-data">
+  <div>
+    <input type="file" name="file"  id="fileInput"  style="width:300px">
+    <input type="text" name="folderName" style="width:300px" value="${folderName}" readonly="readonly" hidden>
+    <input type="submit" value="Upload">
+  </div>
+</form>
+
+<div>
+  <input type="text" id="search" placeholder="Search files">
+  <button onclick="searchFiles()">Search</button>
+</div>
+
+<table id="fileTable">
+  <tr>
+    <th></th>
+    <th>File Name</th>
+    <th>Size</th>
+    <th>Action</th>
+  </tr>
+</table>
+
+<script>
+  const folderName = "[[${folderName}]]";
+
+  $(document).ready(function() {
+      loadFiles();
+
+      $('#uploadForm').on('submit', function(event) {
+          event.preventDefault();
+          const formData = new FormData(this);
+          $.ajax({
+              url: '/files/upload',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function() {
+                  loadFiles();
+              }
+          });
+      });
+  });
+
+  function loadFiles(search = '') {
+      $.ajax({
+          url: '/files/api/list',
+          type: 'GET',
+          data: { folderName: folderName, search: search },
+          success: function(files) {
+              const fileTable = $('#fileTable');
+              fileTable.find("tr:gt(0)").remove();
+
+              if (folderName !== "/") {
+                  const up = $("<tr></tr>");
+                  up.attr("onclick", "location.href='/files/list?folderName=" + encodeURIComponent(folderName) + "&fileName='");
+                  up.append(`<td>📁</td>`);
+                  up.append(`<td colspan=3>..</td>`);
+                  fileTable.append(up);
+              }
+
+              files.forEach(file => {
+                  const row = $("<tr></tr>");
+                  if (file.directory) {
+                      row.attr("onclick", "location.href='/files/list?folderName=" + encodeURIComponent(folderName) + "&fileName=" + encodeURIComponent(file.name) + "'");
+                  }
+                  const icon = file.directory ? '📁' : '📄';
+                  row.append(`<td>${icon}</td>`);
+                  row.append(`<td>${file.name}</td>`);
+                  row.append(`<td>${file.directory ? '' : file.size + ' bytes'}</td>`);
+                  row.append(`<td>${file.directory ? '' : '<a href="/files/download?fileName=' + encodeURIComponent(file.name) + '&folderName=' + encodeURIComponent(folderName) + '">Download</a>'}</td>`);
+                  fileTable.append(row);
+              });
+          }
+      });
+  }
+
+  function searchFiles() {
+      const search = $('#search').val();
+      loadFiles(search);
+  }
+</script>
+
+</body>
+</html>

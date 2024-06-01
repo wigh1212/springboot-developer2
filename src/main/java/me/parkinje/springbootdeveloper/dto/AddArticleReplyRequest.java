@@ -15,8 +15,6 @@ public class AddArticleReplyRequest {
     private Article article;
     public Reply toEntity(String userName,Article article){ //생성자를 사용해 객체 생성
 
-        System.out.println("값 1 "+reply);
-        System.out.println("값 2 "+userName);
         return Reply.builder()
                 .userName(userName)
                 .reply(reply)
